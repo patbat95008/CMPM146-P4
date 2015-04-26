@@ -54,16 +54,33 @@ class SlugBrain:
     # TODO: IMPLEMENT THIS METHOD
     #  (Use helper methods and classes to keep your code organized where
     #  approprioate.)
+
+    #listens for events to change state
+    if isinstance(details, tuple):
+       self.state = 'moving'   
+    elif details == 'i':
+       self.state = 'idle'
+    elif details == 'a':
+       self.state = 'attack'
+       
+    
+    #actions to do in each state
+    #if self.state is 'idle':
+    if details == 'i':
+      self.body.stop()
+    #elif self.state is 'moving':
+    elif isinstance(details, tuple):
+       self.body.go_to(details)
+    #elif self.state is 'attack':
+    elif details == 'a':
+       self.body.set_alarm(2)
+       enemy = find_nearest(mantisBrain)
+       follow(enemy)
+       
     
     #debugger message; gets commands and details for understanding
     if message is not 'collide':
-      print 'Message: ' + repr(message) + ' Details: ' + repr(details)
-    
-    
-    if self.state is 'idle':
-      if message == 'order':
-         self.body.go_to(details)
-        
+      print '!!!Message: ' + repr(message) + ' Details: ' + repr(details) + ' State: ' + repr(self.state)
 
 world_specification = {
   'worldgen_seed': 13, # comment-out to randomize
