@@ -47,13 +47,23 @@ class SlugBrain:
 
   def __init__(self, body):
     self.body = body
+    self.state = 'idle'
 
 
   def handle_event(self, message, details):
     # TODO: IMPLEMENT THIS METHOD
     #  (Use helper methods and classes to keep your code organized where
     #  approprioate.)
-    pass    
+    
+    #debugger message; gets commands and details for understanding
+    if message is not 'collide':
+      print 'Message: ' + repr(message) + ' Details: ' + repr(details)
+    
+    
+    if self.state is 'idle':
+      if message == 'order':
+         self.body.go_to(details)
+        
 
 world_specification = {
   'worldgen_seed': 13, # comment-out to randomize
