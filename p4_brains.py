@@ -8,6 +8,7 @@ class MantisBrain:
     self.body = body
     self.state = 'idle'
     self.target = None
+    
 
   def handle_event(self, message, details):
 
@@ -62,6 +63,8 @@ class SlugBrain:
        self.state = 'idle'
     elif details == 'a':
        self.state = 'attack'
+    elif details == 'b':
+       self.state = 'build'
        
     
     #actions to do in each state
@@ -74,9 +77,22 @@ class SlugBrain:
     #elif self.state is 'attack':
     elif details == 'a':
        self.body.set_alarm(2)
-       enemy = find_nearest(mantisBrain)
-       follow(enemy)
+       enemy = self.body.find_nearest('Mantis')
+       self.body.follow(enemy)
+    elif details == 'b':
+       self.body.set_alarm(5)
+       nest = self.body.find_nearest('Nest')
+       self.body.go_to(nest)
+    
+    #if you're in attack mode, fight back!   
+    if message == 'collide' and details['what'] == 'Mantis' and self.state == 'attack':
+       unit = details['who']
+       unit.amount -= 0.05
        
+    #if you're in build mode, build nests
+    if message == 'collide' and details['what'] == 'Nest' and self.state == 'build':
+       unit = details['who']
+       unit.amount += 0.01
     
     #debugger message; gets commands and details for understanding
     if message is not 'collide':
